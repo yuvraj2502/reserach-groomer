@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+{% load custom_tags %}
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotation Response</title>
+    <link rel="icon" type="image/png" href="{% static 'img/logo.png' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        h2 {
+            color: #3498db;
+        }
+
+        .quotation-detail {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #555;
+        }
+
+        button {
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button.cancel {
+            background-color: #f44336;
+        }
+
+        .response-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 15px;
+            margin-top: 20px;
+        }
+
+        .response-item {
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .response-content {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            color: #555;
+        }
+        
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #3498db;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .response-item strong {
+            display: block;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .response-item p {
+            margin: 0;
+        }
+
+        .messages-container {
+            background-color: #d4edda; /* Green background color */
+            color: #155724; /* Dark green text color */
+            border: 1px solid #c3e6cb; /* Light green border color */
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+    
+    </style>
+</head>
+
+<body>
+    {% if messages %}
+    <div class="messages-container">
+        
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        
+    </div>
+    {% endif %}
+    <h2>Quotation Information</h2>
+
+    <div class="quotation-detail">
+        <strong>Name :</strong> {{quotation.name}}
+    </div>
+
+    <div class="quotation-detail">
+        <strong>Contact No :</strong> {{quotation.contact_no}}
+    </div>
+
+    <div class="quotation-detail">
+        <strong>Email :</strong> {{quotation.email}}
+    </div>
+
+    <div class="quotation-detail">
+        <strong>Project Title:</strong> {{quotation.title}}
+    </div>
+
+    <div class="quotation-detail">
+        <strong>Project Type:</strong> {{quotation.project_type}}
+    </div>
+
+    <div class="quotation-detail">
+        <strong>Description:</strong> {{quotation.description | linebreaks}}
+    </div>
+
+    <div class="quotation-detail">
+        <strong>Technology:</strong> {{quotation.technology}}
+    </div>
+
+    <div class="quotation-detail">
+        <strong>Requested On:</strong> {{quotation.requested_on}}
+    </div>
+
+    <form action="{% url 'quotation-response' quotation.id %}" method="post">
+        {% csrf_token %}
+        
+        <input type="hidden" name="id" value="{{quotation.id}}" required>
+        
+        <label for="send-response">Quotation:</label>
+        <textarea name="send-response" id="send-response" cols="30" rows="10" placeholder="Write quotation here..." required></textarea>
+
+        <button type="submit">Send</button>
+        <button type="button" onclick="cancelAction('{% url 'all-quotations' %}')" class="cancel">Cancel</button>
+    </form>
+
+    <h2>Quotation History </h2>
+    {% for quotation in history %}
+    <div class="response-grid">
+        
+        <div class="response-content">
+            <strong><p>{{quotation.sended_on }}</p></strong>
+            <p>{{quotation.response|linebreaks|safe}}</p>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script>
+        function cancelAction(url) {
+            window.location.href = url;
+        }
+    </script>
+
+</body>
+
+</html>

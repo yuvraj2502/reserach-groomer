@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotation Detail</title>
+    <link rel="icon" type="image/png" href="{% static 'img/logo.png' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #3498db;
+        }
+
+        .project-detail {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .detail-label {
+            font-weight: bold;
+            margin-right: 5px;
+            color: #333;
+        }
+
+        .detail-value {
+            color: #555;
+        }
+
+        .return-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .add-to-project-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #27ae60;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .history-item {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+   
+    <h1>Quotation Details</h1>
+
+    <div class="project-detail">
+        <span class="detail-label">Project Type:</span>
+        <span class="detail-value">{{quotation.project_type}}</span>
+    </div>
+
+    <div class="project-detail">
+        <span class="detail-label">Project Title:</span>
+        <span class="detail-value">{{quotation.title}}</span>
+    </div>
+
+    <div class="project-detail">
+        <span class="detail-label">Project Description:</span>
+        <span class="detail-value">{{quotation.description | linebreaks}}</span>
+    </div>
+
+    <div class="project-detail">
+        <span class="detail-label">Technology:</span>
+        <span class="detail-value">{{quotation.technology}}</span>
+    </div>
+
+    <div class="project-detail">
+        <span class="detail-label">Requested On :</span>
+        <span class="detail-value">{{quotation.requested_on}}</span>
+    </div>
+    
+    <a href="{% url 'add-to-project' user_id=user.id quotation_id=quotation.id %}" class="add-to-project-btn">Add to projects</a>
+    <a href="{% url 'user-alldetail' user.id %}" class="add-to-project-btn">Back</a>    
+    <h2>Quotation History</h2>
+
+    {% for response in history %}
+    <div class="history-item">
+        <span class="detail-label">{{response.sended_on}}</span>
+        <br>
+        <span class="detail-value">{{response.response| linebreaks}}</span>
+    </div>
+    {% endfor %}
+
+    <script>
+        function returnToDashboard(url, email) {
+            window.location.href = url + '?email=' + email;
+        }
+    </script>
+
+</body>
+
+</html>

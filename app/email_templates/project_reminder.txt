@@ -1,0 +1,23 @@
+Dear {{ name }},
+
+Details filled by you:
+
+Name : {{name}}
+Title : {{title}}
+Technology : {{technology}}
+Project Type : {{project_type}}
+
+
+{{response}}
+
+(You can view the details by login to your account on the website https://www.researchgroomer.com/ )
+Note: Confidentiality to the Core
+Your data is safe and secure. We respects the privacy of every student and visitors. We provide how your data is stored and utilized by our website. Every student is advised to read the website privacy policy and understand it. With this, the services provided by Research Groomer let you accept the collection and utilize your data as per the terms mentioned in the policy.
+
+Warm regards,
+Harsha
+HR/Manager
+Research Groomer Ltd
+https://www.researchgroomer.com/
+researchgroomer@gmail.com
+07745991417 / 08871168663

@@ -1,0 +1,228 @@
+{% extends "new_theme_base.html" %}
+{% load static %}
+
+{% load custom_tags %}
+{% block title %}User all details{% endblock title %}
+{% block body %}
+
+<body class="g-sidenav-show  bg-gray-200">
+
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible text-white" role="alert">
+      <span class="text-sm">{{ message }}</span>
+      <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+      </button>
+    </div>
+    {% endfor %}
+
+    <div class="container text-center py-xl-2">
+        <h5 class="fw-semi-bold mb-0 mt-2"><a href="{% url 'dashboard' %}">Dashboard</a> / <a
+                href="{% url 'logout' %}">Logout</a>
+        </h5>
+    </div>
+
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+        <div class="container-fluid py-2 mt-0">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card-body pt-1 p-3">
+                        <ul class="list-group">
+                            <li class="list-group-item border-0 d-flex p-4 mb-2 mt-1 bg-gray-100 border-radius-lg">
+                                <div class="d-flex flex-column">
+                                    <h6 class="mb-3 text-sm">User Details</h6>
+                                    <span class="mb-2 text-xm">Name: <span
+                                            class="text-dark font-weight-bold ms-sm-2">{{user.name}}</span></span>
+                                    <span class="mb-2 text-xm">Email : <span
+                                            class="text-dark ms-sm-2 font-weight-bold">{{user.email}}</span></span>
+                                    <span class="text-xm">Contact No. : <span
+                                            class="text-dark ms-sm-2 font-weight-bold">{{user.contact_no}}</span></span>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    <div class="card my-4 mb-5" >
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-1">
+                                <h6 class="text-white text-capitalize ps-3">Projects</h6>
+                            </div>
+                        </div>
+                        <div class="card-body px-3 pb-2" >
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center justify-content-center mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Project Type
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Project Title
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Requested On
+                                            </th>
+
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Total Amount
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Paid Amount
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Due Amount
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Reminder
+                                                </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Payment
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for project in projects %}
+                                        <tr data-url="{% url 'project-detail' project.id %}">
+                                            <td>
+                                                <p class="text-sm font-weight-bold mb-0">{{project.project_type}}</p>
+                                            </td>
+                                            <td>
+                                                <p class="text-sm font-weight-bold mb-0">{{project.title}}</p>
+                                            </td>
+                                            <td>
+                                                <p class="text-sm font-weight-bold mb-0">{{project.requested_on}}</p>
+                                            </td>
+                                            <td>
+                                                <span class="text-xs font-weight-bold">₹ {{project.total_amount}}</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-xs font-weight-bold">₹ {{project.paid_amount}}</span>
+                                            </td>
+
+                                            <td>
+                                                <span class="text-xs font-weight-bold">₹ {% calculate_due_amount project.total_amount project.paid_amount %} </span>
+                                            </td>
+                                            <td>
+                                                <span class="text-xs font-weight-bold"><a
+                                                        href="{% url 'project-reminder' project.id %}"
+                                                        class="reminder-btn">Click here</a></span>
+                                            </td>
+                                            <td>
+
+                                                <span class="text-xs font-weight-bold"><a
+                                                        href="{% url 'payment-record' project.id %}"
+                                                        class="reminder-btn">Click here</a></span>
+
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+
+                                        <tr data-url="#">
+                                            <td colspan="3">
+                                                <p class="text-xm text-center font-weight-bold mb-0">Total</p>
+                                            </td>
+                                            <td>
+                                                <span class="text-xm font-weight-bold">₹ {% calculate_total_amount projects %}</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-xm font-weight-bold">₹ {% calculate_paid_amount projects %}</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-xm font-weight-bold">₹ {% calculate_total_due_amount projects %}</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-xs font-weight-bold"></span>
+                                            </td>
+                                            <td>
+                                                <span class="text-xs font-weight-bold"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card my-4">
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-1">
+                                <h6 class="text-white text-capitalize ps-3">Quotations</h6>
+                            </div>
+                        </div>
+                        <div class="card-body px-3 pb-2">
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center justify-content-center mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Project Type
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Title
+                                            </th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Requested On
+                                            </th>
+                                         </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for quotation in quotations %}
+                                        <tr data-url="{% url 'quotation-detail' quotation_id=quotation.id  user_id=user.id %}">
+                                            <td>
+                                                <p class="text-sm font-weight-bold mb-0">{{quotation.project_type}}</p>
+                                            </td>
+                                            <td>
+                                                <p class="text-sm font-weight-bold mb-0">{{quotation.title}}</p>
+                                            </td>
+                                            <td>
+                                                <p class="text-sm font-weight-bold mb-0">{{quotation.requested_on}}</p>
+                                            </td>
+                                         </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const firstTableRows = document.querySelectorAll('.table tbody tr');
+
+            firstTableRows.forEach(function (row) {
+                row.style.cursor = 'pointer'; // Add a pointer cursor style
+                row.addEventListener('click', function () {
+                    // Access the data-url attribute to get the target URL
+                    const targetUrl = row.getAttribute('data-url');
+
+                    // Use window.location.href to redirect to the target URL
+                    window.location.href = targetUrl;
+                });
+            });
+        });
+
+    </script>
+
+</body>
+
+{% endblock body %}

@@ -1,0 +1,269 @@
+{% extends "new_theme_base.html" %}
+{% load static %}
+
+{% load custom_tags %}
+{% block title %}User Dashboard{% endblock title %}
+{% block body %}
+
+<body class="g-sidenav-show  bg-gray-200">
+
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible text-black" role="alert">
+    <span class="text-sm">{{ message }}</span>
+    <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+    </button>
+  </div>
+  {% endfor %}
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <div class="container-fluid py-2">
+      <div class="row">
+        <div class="col-12">
+          <div class="card-body pt-4 p-3">
+            <ul class="list-group">
+              <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-3 text-sm">Personal Details</h6>
+                  <span class="mb-2 text-xm">Name: <span
+                      class="text-dark font-weight-bold ms-sm-2">{{user.name}}</span></span>
+                  <span class="mb-2 text-xm">Email : <span
+                      class="text-dark ms-sm-2 font-weight-bold">{{user.email}}</span></span>
+                  <span class="text-xm">Contact No. : <span
+                      class="text-dark ms-sm-2 font-weight-bold">{{user.contact_no}}</span></span>
+                </div>
+
+              </li>
+            </ul>
+          </div>
+
+          <div class="container text-center py-xl-2">
+            <h1 class="display-4 fw-semi-bold mb-0"><a href="{% url 'project-registration' %}">Start a new Project</a>
+            </h1>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb breadcrumb-scroll justify-content-center">
+                <li class="breadcrumb-item">
+                  <a class="text-gray-800" href="{% url 'index' %}">
+                    Home
+                  </a>
+                </li>
+                <li class="breadcrumb-item text-gray-800 active" aria-current="page">
+                  <a class="text-gray-800" href="{% url 'logout' %}">
+                    Logout
+                  </a>
+                </li>
+              </ol>
+            </nav>
+
+          </div>
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-1">
+                <h6 class="text-white text-capitalize ps-3">Project</h6>
+              </div>
+            </div>
+            <div class="card-body px-3 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center justify-content-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Project Type
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Project Title
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Project
+                        Status</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Project Start
+                        Date</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Total Amount
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Paid Amount
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Due Amount
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Payment
+                        History</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Uploaded file
+                      </th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for project in projects %}
+                    <tr>
+                      <td>
+                        <p class="text-sm font-weight-bold mb-0">{{project.project_type}}</p>
+                      </td>
+                      <td>
+                        <p class="text-sm font-weight-bold mb-0">{{project.title}}</p>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">{{ project.status}}
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">{{project.start_date}}</span>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">₹ {{project.total_amount}}</span>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">₹ {{project.paid_amount}}</span>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">₹ {% calculate_due_amount project.total_amount project.paid_amount %}</span>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold"><a href="{% url 'payment-detail' project.id %}"
+                            class="reminder-btn">Pay / History</a></span>
+                      </td>
+                      <td>
+                        {% if project.file_link and project.file_link != 'None' %}
+                        <span class="text-xs font-weight-bold"><a href="{{ project.file_link }}"
+                            class="reminder-btn">Document</a></span>
+                        {% else %}
+                        None
+                        {% endif %}
+                      </td>
+                    </tr>
+                    {% endfor %}
+
+                    <tr>
+                      <td colspan="4" >
+                        <p class="text-xm font-weight-bold mb-0 text-align-center">Total</p>
+                      </td>
+                      <td>
+                        <span class="text-xm font-weight-bold">₹ {% calculate_total_amount projects %}</span>
+                      </td>
+                      <td>
+                        <span class="text-xm font-weight-bold">₹ {% calculate_paid_amount projects %}</span>
+                      </td>
+                      <td>
+                        <span class="text-xm font-weight-bold">₹ {% calculate_total_due_amount projects %}</span>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+
+{% endblock body %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% extends "new_theme_base.html" %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block body %}
+
+
+<body class="g-sidenav-show bg-gray-200">
+  {% include "aside2.html" %}
+  <div class="main-content position-relative max-height-vh-100 h-100">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+      data-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <h6 class="font-weight-bolder mt-2">Profile</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+
+          <ul class="navbar-nav  justify-content-end">
+
+            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                <div class="sidenav-toggler-inner">
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                </div>
+              </a>
+            </li>
+
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="container-fluid px-2 px-md-4">
+
+
+      <div class="card card-body mx-3 mx-md-4 mt-2">
+        <ul class="list-group">
+          <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Full Name:</strong> &nbsp;
+            Alec M. Thompson</li>
+          <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Mobile:</strong> &nbsp; (44) 123
+            1234 123</li>
+          <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Email:</strong> &nbsp;
+            alecthompson@mail.com</li>
+
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!--   Core JS Files   -->
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../assets/js/material-dashboard.min.js?v=3.1.0"></script>
+</body>
+
+{% endblock body %} {% endcomment %}

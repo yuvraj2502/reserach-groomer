@@ -1,0 +1,8 @@
+Jobs request
+
+Name: {{full_name}}
+Phone no : {{phone}}
+Email : {{email}}
+Cover letter : {{cover_letter}}
+
+Resume is attached

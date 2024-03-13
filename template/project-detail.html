@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+{% load custom_tags %}
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Information</title>
+    <link rel="icon" type="image/png" href="{% static 'img/logo.png' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h2 {
+            color: #3498db;
+        }
+
+        .project-detail {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .detail-label {
+            font-weight: bold;
+            margin-right: 5px;
+            color: #333;
+        }
+
+        .detail-value {
+            color: #555;
+        }
+
+        strong {
+            display: inline;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input, textarea, select {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #555;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #3498db;
+        }
+
+        button {
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button.cancel {
+            background-color: #f44336;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .success-message {
+            background-color: #4CAF50; /* Green color */
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% if messages %}
+    {% for message in messages %}
+    <p class="success-message">{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+
+    <h2>Project Information</h2>
+
+    <div class="project-detail">
+        <span class="detail-label">Project Type:</span>
+        <span class="detail-value">{{project.project_type}}</span>
+    </div>
+    <div class="project-detail">
+        <span class="detail-label">Title:</span>
+        <span class="detail-value">{{project.title}}</span>
+    </div>
+    <div class="project-detail">
+        <span class="detail-label">Description:</span>
+        <span class="detail-value">{{project.description | linebreaks}}</span>
+    </div>
+    <div class="project-detail">
+        <span class="detail-label">Requested on:</span>
+        <span class="detail-value">{{project.requested_on}}</span>
+    </div>
+    <div class="project-detail">
+        <span class="detail-label">Total Amount:</span>
+        <span class="detail-value">₹ {{project.total_amount}}</span>
+    </div>
+    <div class="project-detail">
+        <span class="detail-label">Paid Amount:</span>
+        <span class="detail-value">₹ {{project.paid_amount}}</span>
+    </div>
+    <div class="project-detail">
+        <span class="detail-label">Due Amount:</span>
+        <span class="detail-value">₹ {% calculate_due_amount project.total_amount project.paid_amount %} </span>
+    </div>
+
+
+    <form action="{% url 'project-detail' project.id %}" method="POST">
+        {% csrf_token %}
+
+        <div>
+            <strong>Total Amount:</strong>
+            <input type="number" required id="totalAmount" name="totalAmount" value="{{ project.total_amount }}">
+        </div>
+
+        <div>
+            <strong>Start Date:</strong>
+            <input type="date" required id="deadline" value="{{ project.start_date|date:'Y-m-d' }}" name="start_date">
+        </div>
+
+        <div>
+            <strong>File Link:</strong>
+            <input type="text" required id="file-link" value="{{ project.file_link }}" name="file_link">
+        </div>
+
+        <div>
+            <strong>Status:</strong>
+            <select id="status" name="status" required>
+                {% for value, display_text in project.STATUS_CHOICES %}
+                    <option value="{{ value }}" {% if value == project.status %}selected{% endif %}>
+                        {{ display_text }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <input type="hidden" name="id" value="{{ project.id }}">
+
+        <button type="submit">Save</button>
+        <button type='button' onclick="cancelAction('/user-alldetail','{{project.requested_by.id}}',)" class="cancel">Cancel</button>
+    </form>
+
+    <script>
+        function cancelAction(url,id) {
+            var page = url + "/" + encodeURIComponent(id);
+            window.location.href = page;
+        }
+    </script>
+
+</body>
+</html>

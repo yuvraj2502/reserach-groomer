@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+{% load static %}
+{% load custom_tags %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Records</title>
+    <link rel="shortcut icon" href="{% static 'img/logo.png' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #fff;
+            border-bottom: 2px solid #ccc;
+            padding: 10px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.5em;
+        }
+
+        h3{
+            text-align: left ;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 12px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-size: 1em;
+        }
+
+        .button-container {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 1em;
+        }
+
+        .add-record-form {
+            margin-top: 20px;
+            max-width: 100%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        .success-message {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .table-container {
+            margin-top: 15px;
+            
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 600px) {
+            table {
+                overflow-x: auto;
+            }
+
+            th, td {
+                white-space: nowrap;
+            }
+
+            .add-record-form {
+                max-width: 100%;
+            }
+
+            .table-container {
+                overflow-x: auto;
+
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Payment Records</h1>
+        <h2>Title: {{ project.title }}</h2>
+        <h3>Total Amount: ₹ {{ project.total_amount }}</h3>
+        <h3>Paid Amount: ₹ {{ project.paid_amount }}</h3>
+        <h3>Due Amount: ₹ {% calculate_due_amount project.total_amount project.paid_amount %}</h3>
+    </header>
+
+    <div class="button-container">
+        <a style="color:white;text-decoration: none;"
+                href="{% url 'user-alldetail' project.requested_by.id %}"><button>Back</button></a>
+    </div>
+
+    <form class="add-record-form" method="post" action="{% url 'payment-record' project.id %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="payment_date">Payment Date:</label>
+            <input type="datetime-local" id="payment_date" name="payment_date" required>
+        </div>
+
+        <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+
+        <button type="submit">Add Payment Record</button>
+    </form>
+
+    {% if messages %}
+    {% for message in messages %}
+    <p class="success-message">{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Payment Date</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment_record in payment_records %}
+                <tr>
+                    <td>{{ payment_record.payment_date }}</td>
+                    <td>₹{{ payment_record.amount }}</td>
+                    <td>{{ payment_record.description | linebreaks}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>

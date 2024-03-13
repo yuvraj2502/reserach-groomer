@@ -1,0 +1,157 @@
+{% extends "new_theme_base.html" %}
+{% load static %}
+
+{% block title %}All Quotation{% endblock title %}
+{% block body %}
+<body class="g-sidenav-show  bg-gray-200">
+  {% include "aside.html" %}
+  
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group input-group-outline mt-3">
+              <label class="form-label">Search..</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+          <ul class="navbar-nav  justify-content-end">
+
+            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                <div class="sidenav-toggler-inner">
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+
+    <div class="container-fluid py-4">
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-1">
+                <h6 class="text-white text-capitalize ps-3">Quotations</h6>
+              </div>
+            </div>
+            <div class="card-body px-3 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center justify-content-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Title</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Name</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Contact No.</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Submitted</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Requested On</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for quotation in quotations %}
+                    <tr data-url="{% url 'quotation-response' quotation.id %}">
+                      <td>
+                        <p class="text-sm font-weight-bold mb-0">{{quotation.title}}</p>
+                      </td>
+                      <td>
+                        <p class="text-sm font-weight-bold mb-0">{{quotation.name}}</p>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">{{quotation.email}}</span>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">{{quotation.contact_no}}</span>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">
+                          {% if quotation.quotation_submitted %}
+                          Yes
+                          {% else %}
+                          No
+                          {% endif %}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">{{quotation.requested_on}}</span>
+                      </td>
+                      
+                      
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const searchInput = document.querySelector('.input-group input');
+      const tableRows = document.querySelectorAll('.table tbody tr');
+  
+      searchInput.addEventListener('input', function () {
+        const searchTerm = searchInput.value.toLowerCase();
+  
+        tableRows.forEach(function (row) {
+          const name = row.querySelector('td:nth-child(1) p').innerText.toLowerCase();
+          const email = row.querySelector('td:nth-child(2) p').innerText.toLowerCase();
+          const contactNo = row.querySelector('td:nth-child(3) span').innerText.toLowerCase();
+  
+          const match =
+            name.includes(searchTerm) || email.includes(searchTerm) || contactNo.includes(searchTerm);
+  
+          row.style.display = match ? '' : 'none';
+        });
+      });
+  
+      tableRows.forEach(function (row) {
+        row.style.cursor = 'pointer'; // Add a pointer cursor style
+        row.addEventListener('click', function () {
+          // Access the data-url attribute to get the target URL
+          const targetUrl = row.getAttribute('data-url');
+  
+          // Use window.location.href to redirect to the target URL
+          window.location.href = targetUrl;
+        });
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggler = document.getElementById('iconNavbarSidenav');
+      const sidenav = document.querySelector('.g-sidenav-show');
+  
+      if (toggler && sidenav) {
+        toggler.addEventListener('click', function () {
+          sidenav.classList.toggle('g-sidenav-show');
+        });
+      }
+    });
+  
+  </script>
+
+</body>
+
+{% endblock body %}
+
+</html>

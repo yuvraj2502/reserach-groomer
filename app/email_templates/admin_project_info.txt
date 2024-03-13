@@ -1,0 +1,13 @@
+Dear Garima,
+
+You received a quotation request for {{ title }} by {{ name }}. 
+
+Details 
+
+Name : {{name}}
+Title : {{title}}
+Email : {{email}}
+Mobile No : {{mobile_no}}
+Technology : {{technology}}
+Description : {{description}}
+Project Type : {{project_type}}

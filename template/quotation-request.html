@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+
+{% load static %}
+
+{% block title %}Quotation{% endblock title %}
+
+
+{% block body %}
+
+
+{% include "navbar2.html" %}
+
+<!-- PAGE TITLE
+    ================================================== -->
+<header class="py-8 py-md-5" style="background-image: none;">
+    <div class="container text-center py-xl-2">
+        <h1 class="display-4 fw-semi-bold mb-0">Quotation</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-scroll justify-content-center">
+                <li class="breadcrumb-item">
+                    <a class="text-gray-800" href="{% url 'index' %}">
+                        Home
+                    </a>
+                </li>
+                <li class="breadcrumb-item text-gray-800 active" aria-current="page">
+                    Quotation
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+</header>
+
+
+<!-- Quotation Request
+    ================================================== -->
+<div class="container mb-5">
+    <div class="row gx-0">
+
+        <div class="col-md-5 col-xl-8 mx-auto">
+            <!-- Login -->
+            <h3 class="mb-6">Get Quotation of your Project</h3>
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible text-white" role="alert">
+                <span class="text-sm text-black">{{ message }}</span>
+                <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert"
+                    aria-label="Close">
+                </button>
+            </div>
+            {% endfor %}
+
+            <form class="mb-5" action="{% url 'quotation-request' %}" method="post">
+                {% csrf_token %}
+
+                <div class="form-group mb-5">
+                    <label>
+                        Name
+                    </label>
+                    <input type="text" required name="name" class="form-control"  required value="{{ request.user.name }}">
+                </div>
+
+                <!-- Email -->
+                <div class="form-group mb-5">
+                    <label for="modalSigninEmail1">
+                        Email
+                    </label>
+                    <input type="Email" required name="email" value="{{ request.user.email }}" required class="form-control">
+                </div>
+
+                <div class="form-group mb-5">
+                    <label>Mobile No.</label>
+                    <input type="tel" required name="mobile-no" id="contact_no" required class="form-control"
+                        value="{{ request.user.contact_no }}">
+                </div>
+
+                <div class="form-group mb-5">
+                    <label>
+                        Project Title
+                    </label>
+                    <input type="text" required name="title" class="form-control" required id="modalSigninEmail1">
+                </div>
+
+                <div class="form-group mb-5">
+                    <label>
+                        Technology
+                    </label>
+                    <input type="text" required name="technology" class="form-control" required id="modalSigninEmail1">
+                </div>
+
+                <div class="form-group mb-5">
+                    <label>
+                        Description
+                    </label>
+                    <textarea name="projectDescription" class="form-control" required id=""></textarea>
+                </div>
+
+
+                <div class="form-group mb-5">
+                    <label>Project Type</label>
+                    <select class="form-control toggler" id="projectType" name="projectType" required>
+                        <option value=""></option>
+                        {% for type in project_types %}
+                        <option value="{{type.name}}">{{type.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                <!-- Submit -->
+                <button class="btn btn-block btn-primary" type="submit">
+                    Submit
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the input element for contact number
+        var contactNumberInput = document.getElementById('contact_no'); // Assuming the ID is correct
+
+        // Add an event listener for input changes
+        contactNumberInput.addEventListener('input', function () {
+            // Trim whitespace and get the value
+            var contactNumber = contactNumberInput.value.trim();
+
+            // Remove non-numeric characters using a regular expression
+            var numericContactNumber = contactNumber.replace(/\D/g, '');
+
+            // Ensure the length is not less than 10 and not greater than 10
+            var limitedContactNumber = numericContactNumber.slice(0, 10);
+
+            // Update the input value with numeric characters only and exactly 10 digits
+            contactNumberInput.value = limitedContactNumber;
+        });
+    });
+</script>
+
+{% endblock body %}

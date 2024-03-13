@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        /* Reset default margin and padding */
+        body,
+        form,
+        h1 {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Set a background color and some basic styling */
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px 0;
+            color: #007bff;
+            font-size: 28px;
+        }
+
+        /* Style the form container */
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            /* Keeps the content within the form */
+        }
+
+        /* Style form labels and inputs */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+            /* Keeps the content within the input field */
+        }
+
+        /* Style the submit button */
+        #submitBtn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        #submitBtn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Add responsive styles for smaller screens */
+        @media (max-width: 600px) {
+            form {
+                padding: 15px;
+                max-width: 80%;
+                margin: 0 auto;
+            }
+
+            label,
+            input[type="text"],
+            input[type="tel"],
+            input[type="email"],
+            textarea,
+            select {
+                width: 100%;
+                font-size: 14px;
+            }
+
+            #submitBtn {
+                font-size: 14px;
+                width: 100%;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>Get Quotation</h1>
+
+
+    <form id="projectForm" action="{% url 'quotation-request' %}" method="post">
+        {% csrf_token %}
+        {% if messages %}
+        {% for message in messages %}
+        <p>
+            {{ message }}
+            <a href="{% url 'index' %}">Click to return to home page</a>
+        </p>
+        {% endfor %}
+        {% endif %}
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" value="{{ request.user.customuser.name }}" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="mobile">Mobile No.:</label>
+            <input type="tel" id="mobile" value="{{ request.user.customuser.contact_no }}" name="mobile-no" required>
+        </div>
+
+        <div class="form-group">
+            <label for="Email">Email :</label>
+            <input type="email" id="email" name="email"  value="{{request.user.username}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="projectArea">Project Title:</label>
+            <input type="text" id="projectArea" name="title" required>
+        </div>
+
+        <div class="form-group">
+            <label for="technology">Technology:</label>
+            <input type="text" id="technology" name="technology" required>
+        </div>
+
+        <div class="form-group">
+            <label for="projectDescription">Project Description:</label>
+            <textarea id="projectDescription" name="projectDescription" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="projectType">Project Type:</label>
+            <select id="projectType" name="projectType" required>
+                {% for type in project_types %}
+                <option value="{{type.name}}">{{type.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" id="submitBtn">Submit</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('projectForm');
+    
+            form.addEventListener('submit', function () {
+                // Disable the submit button to prevent multiple submissions
+                document.getElementById('submitBtn').disabled = true;
+            });
+        });
+    </script>
+</body>
+
+</html>

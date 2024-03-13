@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+{% load custom_tags %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Reminder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h2 {
+            color: #3498db;
+        }
+
+        .project-detail {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .detail-label {
+            font-weight: bold;
+            margin-right: 5px;
+            color: #333;
+        }
+
+        .detail-value {
+            color: #555;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #555;
+        }
+
+        button {
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button.cancel {
+            background-color: #f44336;
+        }
+
+        .success-message {
+        background-color: #4CAF50; /* Green color */
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        }
+
+        .response-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 15px;
+            margin-top: 20px;
+        }
+    
+        .response-item {
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 10px; /* Added margin to separate date from content */
+        }
+    
+        .response-content {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            color: #555;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p class="success-message">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <h2>Project Information</h2>
+
+    <div class="project-detail">
+        <span class="detail-label">Project Type: </span>
+        <span class="detail-value">{{project.project_type}}</span>
+    </div>
+    <div class="project-detail">
+        <span class="detail-label">Title: </span>
+        <span class="detail-value">{{project.title}}</span>
+    </div>
+    <div class="project-detail">
+        <span class="detail-label">Description: </span>
+        <span class="detail-value">{{project.description | linebreaks | safe}}</span>
+    </div>
+
+    <div class="project-detail">
+        <span class="detail-label">Technology: </span>
+        <span class="detail-value">{{project.technology}}</span>
+    </div>
+    <div class="project-detail">
+        <span class="detail-label">Requested on: </span>
+        <span class="detail-value">{{project.requested_on}}</span>
+    </div>
+    <div class="project-detail">
+        <span class="detail-label">Total Amount: </span>
+        <span class="detail-value">₹ {{project.total_amount}}</span>
+    </div>
+    <div class="project-detail">
+        <span class="detail-label">Paid Amount: </span>
+        <span class="detail-value">₹ {{project.paid_amount}}</span>
+    </div>
+    <div class="project-detail">
+        <span class="detail-label">Due Amount: </span>
+        <span class="detail-value">₹ {% calculate_due_amount project.total_amount project.paid_amount %}</span>
+    </div>
+
+
+    <form action="{% url 'project-reminder' project.id %}" method="post">
+        {% csrf_token %}
+        
+        <input type="hidden" name="id" value="{{project.id}}" required>
+        
+        <label for="send-response">Reminder:</label>
+        
+        <textarea name="send-response" id="send-response" cols="30" rows="10" placeholder="Write a reminder here..." required></textarea>
+
+        <button type="submit">Send</button>
+        <button type="button"  onclick="cancelAction('{{ project.requested_by.id }}')" class="cancel">Cancel</button>
+    </form>
+
+    <h2>Previous Reminders</h2>
+
+    
+    {% for project in history %}
+    <div class="response-grid">
+        <div class="response-content">
+            <strong>{{project.sended_on}}</strong>
+            <br>
+            <p>{{project.response|linebreaks|safe}}</p>
+        </div>
+    </div>
+{% endfor %}
+
+
+
+
+    <script>
+
+
+        function cancelAction(id) {
+            var page = "/user-alldetail" + "/" + encodeURIComponent(id);
+            window.location.href = page; // Corrected the line here
+        }
+    </script>
+
+</body>
+
+</html>
+

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block title %}FAQ{% endblock title %}
+{% block body %}
+  
+{% include "navbar2.html" %}
+
+    <!-- PAGE TITLE
+    ================================================== -->
+    <header class="py-8 py-md-5" style="background-image: none;">
+        <div class="container text-center py-xl-2">
+            <h1 class="display-4 fw-semi-bold mb-0">Frequently Asked Questions</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-scroll justify-content-center">
+                    <li class="breadcrumb-item">
+                        <a class="text-gray-800" href="{% url 'index' %}">
+                            Home
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-gray-800 active" aria-current="page">
+                        Frequently Asked Questions
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <!-- Img -->
+        <img class="d-none img-fluid" src="...html" alt="...">
+    </header>
+
+
+    <!-- FAQ
+    ================================================== -->
+
+    
+    <div class="container mb-11">
+        <div class="w-xl-65 mx-auto">
+            <h1>Questions</h1>
+            <div class="mb-8" id="accordionCurriculum">
+                {% for faq in faqs %}
+                <div class="border rounded shadow mb-6 overflow-hidden">
+                    <div class="d-flex align-items-center" id="curriculumheadingOne">
+                        <h5 class="mb-0 w-100">
+                            <button class="d-flex align-items-center text-left p-5 min-height-80 text-dark fw-medium collapse-accordion-toggle line-height-one" type="button" data-bs-toggle="collapse" data-bs-target="#Curriculumcollapsetwo-{{faq.id}}" aria-expanded="false" aria-controls="CurriculumcollapseOne">
+                                {{faq.question}}
+    
+                                <span class="ms-auto text-dark d-flex">
+                                    <!-- Icon -->
+                                    <svg width="15" height="2" viewBox="0 0 15 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="15" height="2" fill="currentColor"/>
+                                    </svg>
+    
+                                    <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 7H15V9H0V7Z" fill="currentColor"/>
+                                        <path d="M6 16L6 8.74228e-08L8 0L8 16H6Z" fill="currentColor"/>
+                                    </svg>
+    
+                                </span>
+                            </button>
+                        </h5>
+                    </div>
+    
+                    <div id="Curriculumcollapsetwo-{{faq.id}}" class="collapse" aria-labelledby="curriculumheadingOne" data-parent="#accordionCurriculum">
+                        <div class="p-6 border-top">
+                            {{faq.ans}}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock body %}

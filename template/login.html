@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login{% endblock title %}
+
+
+{% block body %}
+
+
+{% include "navbar2.html" %}
+
+    <!-- PAGE TITLE
+    ================================================== -->
+    <header class="py-8 py-md-5" style="background-image: none;">
+        <div class="container text-center py-xl-2">
+            <h1 class="display-4 fw-semi-bold mb-0">Login</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-scroll justify-content-center">
+                    <li class="breadcrumb-item">
+                        <a class="text-gray-800" href="{% url 'index' %}">
+                            Home
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-gray-800 active" aria-current="page">
+                        Login
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <!-- Img -->
+        <img class="d-none img-fluid" src="...html" alt="...">
+    </header>
+
+
+    <!-- LOGIN
+    ================================================== -->
+    <div class="container mb-5">
+        <div class="row gx-0">
+            
+            <div class="col-md-5 md-2 col-xl-4 mx-auto">
+                <!-- Login -->
+                <h3 class="mb-6">Log In to Account!</h3>
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible text-black" role="alert">
+                  <span class="text-sm">{{ message }}</span>
+                  <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert" aria-label="Close">
+                  </button>
+                </div>
+                {% endfor %}
+                <!-- Form Login -->
+                <form class="mb-5" method="post" action={% url 'dologin' %}>
+                    {% csrf_token %}
+                    <!-- Email -->
+                    <div class="form-group mb-5">
+                        <label for="modalSigninEmail1">
+                            Email
+                        </label>
+                        <input type="Email" required name="email" class="form-control" id="modalSigninEmail1" placeholder="example@gmail.com">
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group mb-5">
+                        <label for="modalSigninPassword1">
+                            Password
+                        </label>
+                        <input type="password" required name="password" class="form-control" id="modalSigninPassword1" placeholder="**********">
+                    </div>
+
+
+                    <!-- Submit -->
+                    <button class="btn btn-block btn-primary" type="submit">
+                        LOGIN
+                    </button>
+                </form>
+                <p class="mb-0 font-size-sm text-center">
+                    Forget Password? <a class="text-underline" href="{% url 'forget_password' %}">Reset</a>
+                </p>
+                <!-- Text -->
+                <p class="mb-0 font-size-sm text-center">
+                    Don't have an account? <a class="text-underline" href="{% url 'register' %}">Register</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}

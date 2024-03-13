@@ -1,0 +1,259 @@
+{% extends "new_theme_base.html" %}
+{% load static %}
+
+{% load custom_tags %}
+{% block title %}Payment Detail{% endblock title %}
+{% block body %}
+
+<body class="g-sidenav-show  bg-gray-200">
+
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+
+    <!-- End Navbar -->
+    
+
+
+    <div class="container-fluid py-2">
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card-body pt-4 p-3">
+            <ul class="list-group">
+              <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-3 text-sm">Account Details</h6>
+                  <span class="mb-2 text-xm">Account Holder Name: <span class="text-dark font-weight-bold ms-sm-2">Garima Mathur</span></span>
+                  <span class="mb-2 text-xm">Account No. : <span class="text-dark ms-sm-2 font-weight-bold">20382652189</span></span>
+                  <span class="mb-2 text-xm"">Bank Name : <span class="text-dark ms-sm-2 font-weight-bold">State Bank of India</span></span>
+                  <span class="text-xm">IFSC Code : <span class="text-dark ms-sm-2 font-weight-bold">SBIN0016154</span></span>
+                </div>
+                
+
+              </li>
+
+              <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg justify-content-center align-items-center">
+                <div class="d-flex flex-column">
+                    <img src="{% static 'img\QR-code.jpeg' %}" class="img-fluid" alt="QR Code">
+                </div>
+            </li>
+            
+            </ul>
+          </div>
+
+          <div class="container text-center py-xl-2">
+            <h5 class="fw-semi-bold mb-0">Project title - {{project.title}}</h5>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-scroll justify-content-center">
+                    <li class="breadcrumb-item">
+                        <a class="text-gray-800" href="{% url 'user-dashboard' %}">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-gray-800 active" aria-current="page">
+                      <a class="text-gray-800" href="{% url 'logout' %}">
+                        Logout
+                    </a>
+                    </li>
+                </ol>
+            </nav>
+            
+        </div>
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                <h6 class="text-white text-capitalize ps-3">Payment Details</h6>
+              </div>
+            </div>
+            <div class="card-body px-5 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center justify-content-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Payment Date
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Amount
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for payment in payments %}
+                    <tr>
+                      <td>
+                        <p class="text-sm font-weight-bold mb-0">{{payment.payment_date}}</p>
+                      </td>
+                      <td>
+                        <p class="text-sm font-weight-bold mb-0">₹ {{payment.amount}}</p>
+                      </td>
+                      <td>
+                        <span class="text-sm font-weight-bold mb-0">{{payment.description}}
+                      </td>
+                      
+
+
+
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const searchInput = document.querySelector('.input-group input');
+      const tableRows = document.querySelectorAll('.table tbody tr');
+
+      searchInput.addEventListener('input', function () {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        tableRows.forEach(function (row) {
+          const name = row.querySelector('td:nth-child(1) p').innerText.toLowerCase();
+          const email = row.querySelector('td:nth-child(2) p').innerText.toLowerCase();
+          const contactNo = row.querySelector('td:nth-child(3) span').innerText.toLowerCase();
+
+          const match =
+            name.includes(searchTerm) || email.includes(searchTerm) || contactNo.includes(searchTerm);
+
+          row.style.display = match ? '' : 'none';
+        });
+      });
+
+      tableRows.forEach(function (row) {
+        row.style.cursor = 'pointer'; // Add a pointer cursor style
+        row.addEventListener('click', function () {
+          // Access the data-url attribute to get the target URL
+          const targetUrl = row.getAttribute('data-url');
+
+          // Use window.location.href to redirect to the target URL
+          window.location.href = targetUrl;
+        });
+      });
+    });
+
+  </script>
+
+</body>
+
+{% endblock body %}
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% extends "new_theme_base.html" %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block body %}
+
+
+<body class="g-sidenav-show bg-gray-200">
+  {% include "aside2.html" %}
+  <div class="main-content position-relative max-height-vh-100 h-100">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+      data-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <h6 class="font-weight-bolder mt-2">Profile</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+
+          <ul class="navbar-nav  justify-content-end">
+
+            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                <div class="sidenav-toggler-inner">
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                </div>
+              </a>
+            </li>
+
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="container-fluid px-2 px-md-4">
+
+
+      <div class="card card-body mx-3 mx-md-4 mt-2">
+        <ul class="list-group">
+          <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Full Name:</strong> &nbsp;
+            Alec M. Thompson</li>
+          <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Mobile:</strong> &nbsp; (44) 123
+            1234 123</li>
+          <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Email:</strong> &nbsp;
+            alecthompson@mail.com</li>
+
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!--   Core JS Files   -->
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../assets/js/material-dashboard.min.js?v=3.1.0"></script>
+</body>
+
+{% endblock body %} {% endcomment %}

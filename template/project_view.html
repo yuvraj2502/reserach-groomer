@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project View</title>
+</head>
+
+<style>
+
+/* Basic reset for default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+/* Title styles */
+h1 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    text-align: center;
+    color: #333;
+}
+
+/* Form styles */
+form {
+    margin-bottom: 20px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+input[type="submit"],
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 10px auto;
+}
+
+/* Media query for responsiveness */
+@media screen and (max-width: 600px) {
+    /* Adjustments for smaller screens */
+    h1 {
+        font-size: 24px;
+    }
+
+    textarea {
+        font-size: 14px;
+    }
+
+    input[type="submit"],
+    button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    
+}
+
+</style>
+<body>
+    <h1>
+        Title - {{project.title}}
+    </h1>
+    <p>Name - {{project.name}}</p>
+    <p>Mobile No - {{project.mobile_no}}</p>
+    <p>Email - {{project.email}}</p>
+    <p>Status - {{project.status}}</p>
+    <p>Total amount - {{project.total_amount}}</p>
+    <p>Advance amount - {{project.advance_amount}}</p>
+    <p>Timeline - {{project.timeline}}</p>
+    <p>Technolog Used - {{project.technology}}</p>
+    <p>Project Type - {{project.project_type}}</p>
+    <p>Description - {{project.description}}</p>
+
+    <form action={% url 'project-response' %} method="post">
+        {% csrf_token %}
+        <input type="number" required name="id" hidden value="{{project.id}}">
+        <textarea name="send-response" required id="send-response" cols="30" rows="10"></textarea> 
+        <label for="Price">Amount for this project</label>
+        <input type="text" required name="amount">  
+    <br> 
+    
+    <input type="submit" value="Send">
+
+    </form>
+    <!-- <button onclick = "window.location.href='{% url 'project-complete' project.id %}';">
+        Mark as Complete
+    </button></td> -->
+    <button onclick = "window.location.href='{% url 'dashboard' %}';">
+        Dashboard
+    </button>
+
+</body>
+
+</html>

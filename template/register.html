@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Register{% endblock title %}
+
+
+{% block body %}
+
+
+{% include "navbar2.html" %}
+
+
+<!-- PAGE TITLE
+================================================== -->
+<header class="py-8 py-md-5" style="background-image: none;">
+    <div class="container text-center py-xl-2">
+        <h1 class="display-4 fw-semi-bold mb-0">Register</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-scroll justify-content-center">
+                <li class="breadcrumb-item">
+                    <a class="text-gray-800" href="{% url 'index' %}">
+                        Home
+                    </a>
+                </li>
+                <li class="breadcrumb-item text-gray-800 active" aria-current="page">
+                    Register
+                </li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Img -->
+    <img class="d-none img-fluid" src="...html" alt="...">
+</header>
+
+
+<!-- REGISTER
+================================================== -->
+<div class="container mb-5">
+    <div class="row gx-0">
+        <div class="col-md-7 col-xl-4 mx-auto">
+            <!-- Register -->
+            <h3 class="mb-6">Sign Up</h3>
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible text-black" role="alert">
+                <span class="text-sm">{{ message }}</span>
+                <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+
+            <!-- Form Register -->
+            <form class="mb-5" method="POST" action="{% url 'register' %}">
+                {% csrf_token %}
+
+                <!-- Email -->
+                <div class="form-group mb-5">
+                    <label for="modalSignupEmail1">
+                        Name
+                    </label>
+                    <input type="name" required name='name' class="form-control" id="modalSignupEmail1"
+                        placeholder="Vikram">
+                </div>
+
+                <div class="form-group mb-5">
+                    <label for="modalSignupEmail1">
+                        Contact no
+                    </label>
+                    <input type="tel" required name='number' class="form-control" id="contact_no"
+                        placeholder="9876569858">
+                </div>
+
+
+                <div class="form-group mb-5">
+                    <label for="modalSignupEmail1">
+                        Email
+                    </label>
+                    <input type="email" required name='email' class="form-control" placeholder="groomer@gmail.com">
+                </div>
+                <!-- Password -->
+                <div class="form-group mb-5">
+                    <label for="modalSignupPassword3">
+                        Password
+                    </label>
+                    <input type="password" required name='password' class="form-control" id="modalSignupPassword3"
+                        placeholder="**********">
+                </div>
+
+                <!-- Submit -->
+                <button class="btn btn-block btn-primary" type="submit">
+                    SIGN UP
+                </button>
+
+            </form>
+
+            <!-- Text -->
+            <p class="mb-0 font-size-sm text-center">
+                Already have an account? <a class="text-underline" href="{% url 'dologin' %}">Log In</a>
+            </p>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the input element for contact number
+        var contactNumberInput = document.getElementById('contact_no'); // Assuming the ID is correct
+
+        // Add an event listener for input changes
+        contactNumberInput.addEventListener('input', function () {
+            // Trim whitespace and get the value
+            var contactNumber = contactNumberInput.value.trim();
+
+            // Remove non-numeric characters using a regular expression
+            var numericContactNumber = contactNumber.replace(/\D/g, '');
+
+            // Ensure the length is not less than 10 and not greater than 10
+            var limitedContactNumber = numericContactNumber.slice(0, 10);
+
+            // Update the input value with numeric characters only and exactly 10 digits
+            contactNumberInput.value = limitedContactNumber;
+        });
+    });
+</script>
+
+{% endblock body %}

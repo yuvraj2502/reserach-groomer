@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}{{info_topic.name}}{% endblock title %}
+
+
+{% block body %}
+{% include "navbar2.html" %}
+
+<!-- Services
+    ================================================== -->
+    <section class="py-8 py-md-8 bg-white-ice">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-6 mb-lg-0">
+                    <img class="img-fluid rounded" src="{{info_topic.image.url}}" alt="...">
+                </div>
+    
+                <div class="col-lg-6">
+                    <div class="ms-xl-2">
+                        <h1 class="font-fredoka mb-3 text-capitalize">{{info_topic.name}}</h1>
+    
+
+    
+                            <p class="font-nunito mb-5 line-height-lg">{{info_topic.description| linebreaks}}</p>
+                       
+    
+                        <a href="{% url 'quotation-request' %}"
+                            class="btn btn-turbo text-white-all btn-wide lift rounded-xl">Get Started</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+{% endblock body %}

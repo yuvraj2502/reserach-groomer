@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Exporter</title>
+    <link rel="icon" type="image/png" href="{% static 'img/logo.png' %}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            padding: 20px;
+            text-align: center;
+            background-color:white;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Responsive Styles */
+        @media only screen and (max-width: 600px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Welcome. Download your Excel records</h1>
+    <button id="Payment_record">Download Payment Records</button>
+    <button id="User_record">Download User Records</button>
+    <a href="{% url 'dashboard' %}"><button >Back to Dashboard</button></a>
+    <script>
+        function getCurrentDate() {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+            var yyyy = today.getFullYear();
+    
+            return dd + '-' + mm +  '-' + yyyy;
+        }
+    
+        document.getElementById('Payment_record').addEventListener('click', function () {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/export-payment-records/', true);
+            xhr.responseType = 'blob';
+    
+            xhr.onload = function () {
+                var a = document.createElement('a');
+                var blob = new Blob([xhr.response], { type: 'application/ms-excel' });
+                var url = window.URL.createObjectURL(blob);
+    
+                // Add current date to the file name
+                var currentDate = getCurrentDate();
+                a.href = url;
+                a.download = 'Payment_records_' + currentDate + '.xlsx';
+    
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            };
+    
+            xhr.send();
+        });
+    
+    
+        document.getElementById('User_record').addEventListener('click', function () {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/export-user-records/', true);
+            xhr.responseType = 'blob';
+    
+            xhr.onload = function () {
+                var a = document.createElement('a');
+                var blob = new Blob([xhr.response], { type: 'application/ms-excel' });
+                var url = window.URL.createObjectURL(blob);
+    
+                // Add current date to the file name
+                var currentDate = getCurrentDate();
+                a.href = url;
+                a.download = 'User_records_' + currentDate + '.xlsx';
+    
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            };
+    
+            xhr.send();
+        });
+    </script>
+    
+</body>
+</html>
