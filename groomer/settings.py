@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-!w)!!l5z-9l^z^y%j&h3&d88!yo5^*(0m3w!9=nn$84nf7ba!i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['researchgroomer.com','www.researchgroomer.com','*']
+ALLOWED_HOSTS = ['*','.vercel.app', '.now.sh']
 
 
 # Application definition
@@ -70,18 +70,28 @@ WSGI_APPLICATION = 'groomer.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'research_groomer', 
+#         'USER': 'postgres', 
+#         'PASSWORD': 'uv123',
+#         'HOST': '127.0.0.1', 
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'research_groomer', 
-        'USER': 'postgres', 
-        'PASSWORD': 'uv123',
-        'HOST': '127.0.0.1', 
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql',
+        'URL': 'postgresql://postgres:hRzQUNXutedURnebawBKyuyTPGqjUzMK@roundhouse.proxy.rlwy.net:55281/railway',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'hRzQUNXutedURnebawBKyuyTPGqjUzMK',
+        'HOST': 'roundhouse.proxy.rlwy.net',
+        'PORT': 55281,
     }
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -113,14 +123,18 @@ USE_TZ = True
 STATIC_URL = 'static/'
 # STATIC_ROOT = 'assets/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
     
-]
-STATIC_ROOT  = os.path.join(BASE_DIR, 'staticfiles')
+# ]
+# STATIC_ROOT  = os.path.join(BASE_DIR, 'staticfiles')
 
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
 MEDIA_ROOT  = os.path.join(BASE_DIR, 'media')
+
+
+STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 
 
 MEDIA_URL = '/media/'
